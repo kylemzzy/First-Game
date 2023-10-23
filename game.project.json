@@ -1,28 +1,55 @@
 {
-  "name": "FirstGame",
+  "name": "Lobby",
+  "servePlaceIds": [15148385760],
   "tree": {
     "$className": "DataModel",
 
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
     "ReplicatedStorage": {
       "Shared": {
-        "$path": "src/shared"
+        "$path": "src/Game/shared"
       }
     },
 
     "ServerScriptService": {
       "Server": {
-        "$path": "src/server"
+        "$path": "src/Game/server"
       }
     },
 
     "StarterPlayer": {
       "StarterPlayerScripts": {
         "Client": {
-          "$path": "src/client"
+          "$path": "src/Game/client"
         }
       }
     },
 
+
+
+
+
+
+
+
+
+
+
+    
     "Workspace": {
       "$properties": {
         "FilteringEnabled": true
