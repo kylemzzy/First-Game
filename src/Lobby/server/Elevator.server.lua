@@ -13,19 +13,21 @@ local maxPlayers = elevator.Configs.MaxPlayers.Value
 local RemoteEvents = ReplicatedStorage:WaitForChild("RemoteEvents")
 local RemoteEventsElevator = RemoteEvents:WaitForChild("Elevator")
 local elevatorEnterLeaveEvent = RemoteEventsElevator:WaitForChild("EnterLeave")
+local elevatorTeleportEvent = RemoteEventsElevator:WaitForChild("Teleporting")
 
 -- Variables
 local waitingPlayers = {}
 local countdownRunning = false
 
 ----------------------- FUNCTIONS -----------------------
-local function setup()
-    -- elevator initialization texts
+local function Setup()
+    -- elevator initialization
+    waitingPlayers = {}
     playerCountGui.Text = #waitingPlayers .. "/" .. maxPlayers .. " Players"
     countdownGui.Text = "Waiting For Players..."
 end
 
-local function updatePlayerCount()
+local function UpdatePlayerCount()
     -- update text if player leaves or joins
     playerCountGui.Text = #waitingPlayers .. "/" .. maxPlayers .. " Players"
 end
@@ -34,7 +36,7 @@ local function StartCountDown()
     -- prevent countdown from resetting if there is at least 1 person
     countdownRunning = true
     -- countdown every second
-    for i = 10, 1, -1 do
+    for i = 5, 1, -1 do
         countdownGui.Text = "Teleporting in " .. i .. " seconds"
         task.wait(1)
         -- if everyone leaves the elevator, then we stop countdown
@@ -44,10 +46,20 @@ local function StartCountDown()
             return
         end
     end
-    
+    -- start teleporting here
     print ("TELEPORTING....")
+    -- teleport each player in the table 1 by 1
+    for _, playerID in pairs(waitingPlayers) do
+        -- must convert the id to get the player object
+        local player = Players:GetPlayerByUserId(playerID)
+        -- perform any client side teleportations here
+        elevatorTeleportEvent:FireClient(player)
+    end
     countdownGui.Text = "Teleporting Players..."
     countdownRunning  = false
+
+    task.wait(1)
+    Setup()
 end
 
 elevator.Entrance.Touched:Connect(function(part)
@@ -67,7 +79,7 @@ elevator.Entrance.Touched:Connect(function(part)
     elevatorEnterLeaveEvent:FireClient(player, elevator) -- remoteEvent to change the camera from clients side
     player.Character.PrimaryPart.CFrame = elevator.Inside.CFrame
     -- update the players text
-    updatePlayerCount()
+    UpdatePlayerCount()
     -- if the countdown isnt running then start it
     if not countdownRunning then
         StartCountDown()
@@ -86,13 +98,23 @@ elevatorEnterLeaveEvent.OnServerEvent:Connect(function(player)
         player.Character.PrimaryPart.CFrame = elevator.Outside.CFrame
     end
     -- update the players text
-    updatePlayerCount()
+    UpdatePlayerCount()
+end)
+
+Players.PlayerRemoving:Connect(function(player)
+    -- check to see if the player is in the the waiting queue upon leaving, 
+    local checkWaiting = table.find(waitingPlayers, player.UserId)
+    -- if they are then we remove them
+    if checkWaiting then
+        -- when removing, we can only remove the index, we achieve by table.find
+        table.remove(waitingPlayers, checkWaiting)
+    end
+    UpdatePlayerCount()
 end)
 
 
-
 ----------------------- MAIN -----------------------
-setup()
+Setup()
 
 
 

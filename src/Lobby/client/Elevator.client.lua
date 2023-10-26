@@ -6,6 +6,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RemoteEvents = ReplicatedStorage:WaitForChild("RemoteEvents")
 local RemoteEventsElevator = RemoteEvents:WaitForChild("Elevator")
 local elevatorEnterLeaveEvent = RemoteEventsElevator:WaitForChild("EnterLeave")
+local elevatorTeleportEvent = RemoteEventsElevator:WaitForChild("Teleporting")
 
 local Player = game.Players.LocalPlayer
 local PlayerGui = Player:WaitForChild("PlayerGui") 
@@ -21,6 +22,10 @@ elevatorEnterLeaveEvent.OnClientEvent:Connect(function(elevator)
     exitButtonGui.TextButton.Visible = true
     camera.CameraType = Enum.CameraType.Scriptable
     camera.CFrame = elevator.Camera.CFrame
+end)
+
+elevatorTeleportEvent.OnClientEvent:Connect(function()
+    exitButtonGui.TextButton.Visible = false
 end)
     
 
