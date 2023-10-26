@@ -21,20 +21,23 @@
 
     "ReplicatedStorage": {
       "Shared": {
-        "$path": "src/Lobby/shared"
+        "$path": "src/Lobby/Shared"
+      },
+      "Modules": {
+        "$path": "src/Lobby/Modules"
       }
     },
 
     "ServerScriptService": {
       "Server": {
-        "$path": "src/Lobby/server"
+        "$path": "src/Lobby/Server"
       }
     },
 
     "StarterPlayer": {
       "StarterPlayerScripts": {
         "Client": {
-          "$path": "src/Lobby/client"
+          "$path": "src/Lobby/Client"
         }
       }
     },

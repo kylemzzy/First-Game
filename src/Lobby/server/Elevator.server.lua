@@ -1,7 +1,11 @@
 -- Services
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Players = game:GetService("Players")
--- 
+local TeleportService = game:GetService("TeleportService")
+
+-- Requires
+local RepModules = ReplicatedStorage:WaitForChild("Modules")
+local FailedTeleports = require(RepModules.FailedTeleports)
 
 -- References
 local elevator = workspace.Elevator
@@ -18,8 +22,18 @@ local elevatorTeleportEvent = RemoteEventsElevator:WaitForChild("Teleporting")
 -- Variables
 local waitingPlayers = {}
 local countdownRunning = false
+local gameAreaPlaceID = 15148385760
 
 ----------------------- FUNCTIONS -----------------------
+local function TeleportPlayers()
+    -- teleport players and reserve servers
+    local reservedServerCode = TeleportService:ReserveServer(15148385760)
+    local options = Instance.new("TeleportOptions")
+    options.ReservedServerAccessCode = reservedServerCode
+    -- roblox provided module script to handle failed teleports
+    FailedTeleports(gameAreaPlaceID, waitingPlayers, options)
+end
+
 local function Setup()
     -- elevator initialization
     waitingPlayers = {}
@@ -49,15 +63,15 @@ local function StartCountDown()
     -- start teleporting here
     print ("TELEPORTING....")
     -- teleport each player in the table 1 by 1
-    for _, playerID in pairs(waitingPlayers) do
+    for _, player in pairs(waitingPlayers) do
         -- must convert the id to get the player object
-        local player = Players:GetPlayerByUserId(playerID)
+        -- local player = Players:GetPlayerByUserId(playerID)
         -- perform any client side teleportations here
         elevatorTeleportEvent:FireClient(player)
     end
     countdownGui.Text = "Teleporting Players..."
     countdownRunning  = false
-
+    TeleportPlayers()
     task.wait(1)
     Setup()
 end
@@ -68,14 +82,14 @@ elevator.Entrance.Touched:Connect(function(part)
     if not player then return end
 
     -- check if the player is already waiting in the table to avoid dupes
-    local checkWaiting = table.find(waitingPlayers, player.UserId)
+    local checkWaiting = table.find(waitingPlayers, player)
     if checkWaiting then return end
 
     -- if the max player is at max capacity
     if #waitingPlayers >= maxPlayers then return end
     
     -- if it is a player, then teleport them inside the elevator. store in the userID to avoid weird duplicate names scenarios
-    table.insert(waitingPlayers, player.UserId)
+    table.insert(waitingPlayers, player)
     elevatorEnterLeaveEvent:FireClient(player, elevator) -- remoteEvent to change the camera from clients side
     player.Character.PrimaryPart.CFrame = elevator.Inside.CFrame
     -- update the players text
@@ -88,7 +102,7 @@ end)
 
 elevatorEnterLeaveEvent.OnServerEvent:Connect(function(player)
     -- remove player from table if we find them
-    local checkWaiting = table.find(waitingPlayers, player.UserId)
+    local checkWaiting = table.find(waitingPlayers, player)
     if checkWaiting then
         -- when removing, we can only remove the index, we achieve by table.find
         table.remove(waitingPlayers, checkWaiting)
@@ -103,7 +117,7 @@ end)
 
 Players.PlayerRemoving:Connect(function(player)
     -- check to see if the player is in the the waiting queue upon leaving, 
-    local checkWaiting = table.find(waitingPlayers, player.UserId)
+    local checkWaiting = table.find(waitingPlayers, player)
     -- if they are then we remove them
     if checkWaiting then
         -- when removing, we can only remove the index, we achieve by table.find
