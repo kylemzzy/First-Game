@@ -6,6 +6,7 @@ local TeleportService = game:GetService("TeleportService")
 -- Requires
 local RepModules = ReplicatedStorage:WaitForChild("Modules")
 local FailedTeleports = require(RepModules.FailedTeleports)
+local dataManager = require(ReplicatedStorage.Modules.SavingData.DataManager)
 
 
 -- References
@@ -124,6 +125,18 @@ function elevator.New(template)
         end
         -- update the players text
         elevator.UpdatePlayerCount(playerCountGui, waitingPlayers, maxPlayers)
+
+        ------------------------------- TEMP --------------------------------- 
+        local data = dataManager:Get(player)
+        -- if data does not exist
+        if data == nil then
+            print(Players.Name .. " data not loaded or non existant in elevator")
+            return
+        end
+        data.softCurrency += 10
+        -- show it on leaderstats
+        player.leaderstats.Soft.Value = data.softCurrency
+        print (player.Name .. " has: " .. data.softCurrency ) 
     end)
 
     -- destroy the template placeholder

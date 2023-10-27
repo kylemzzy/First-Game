@@ -24,13 +24,19 @@
         "$path": "src/Lobby/Shared"
       },
       "Modules": {
-        "$path": "src/Lobby/Modules"
+        "$path": "src/Lobby/Modules",
+        "SavingData": {
+          "$path": "src/Shared/SavingData"
+        }
       }
     },
 
     "ServerScriptService": {
       "Server": {
         "$path": "src/Lobby/Server"
+      },
+      "Shared": {
+        "$path": "src/Shared/Server"
       }
     },
 
