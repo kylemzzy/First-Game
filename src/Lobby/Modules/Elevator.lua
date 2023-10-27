@@ -85,8 +85,6 @@ function elevator.New(template)
     
     -- call the setup here
     elevator.Setup(maxPlayers, waitingPlayers,  playerCountGui, countdownGui)
-
-
     -- listen event to teleport inside 
     elevatorModel.Entrance.Touched:Connect(function(part)
         -- check if the part that touched elevator is that of a player
@@ -116,12 +114,9 @@ function elevator.New(template)
     elevatorEnterLeaveEvent.OnServerEvent:Connect(function(player)
         -- remove player from table if we find them
         local checkWaiting = table.find(waitingPlayers, player)
-        if checkWaiting then
-            -- when removing, we can only remove the index, we achieve by table.find
-            table.remove(waitingPlayers, checkWaiting)
-        end
+        if not checkWaiting then return end
         -- due to OOP, decide which elevator we want to teleport to based on where the player is at
-
+        table.remove(waitingPlayers, checkWaiting)
         -- if the character for the player exists, teleport them outside of the elevator
         if player.Character then
             print(elevatorModel.Name)
