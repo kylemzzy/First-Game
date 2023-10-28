@@ -1,12 +1,13 @@
 -- Services
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local ServerScriptService = game:GetService("ServerScriptService")
 local Players = game:GetService("Players")
 local TeleportService = game:GetService("TeleportService")
 
 -- Requires
-local RepModules = ReplicatedStorage:WaitForChild("Modules")
-local FailedTeleports = require(RepModules.FailedTeleports)
-local dataManager = require(ReplicatedStorage.Modules.SavingData.DataManager)
+-- local RepModules = ReplicatedStorage:WaitForChild("Modules")
+local FailedTeleports = require(ServerScriptService.Shared.Modules.FailedTeleports)
+local dataManager = require(ServerScriptService.Shared.Modules.SavingData.DataManager)
 
 
 -- References

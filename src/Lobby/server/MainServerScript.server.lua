@@ -1,8 +1,9 @@
 -- Services
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local ServerScriptService = game:GetService("ServerScriptService")
 
 -- Requires
-local elevator = require(ReplicatedStorage.Modules.Elevator)
+local elevator = require(ServerScriptService.Server.Modules.Elevator)
 
 -- References
 local getElevators = workspace.Map.Elevators

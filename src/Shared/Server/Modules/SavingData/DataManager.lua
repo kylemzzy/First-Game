@@ -1,7 +1,6 @@
 local players = game:GetService("Players")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
 -- local Workspace = game:GetService("Workspace")
-local profileService = require(ReplicatedStorage.Modules.SavingData.ProfileService)
+local profileService = require(script.Parent.ProfileService)
 
 local profiles = {}
 -- name of the module is dataManager, and as per modules we have to return it

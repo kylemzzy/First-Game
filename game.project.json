@@ -24,10 +24,7 @@
         "$path": "src/Game/Shared"
       },
       "Modules": {
-        "$path": "src/Lobby/Modules",
-        "SavingData": {
-          "$path": "src/Shared/SavingData"
-        }
+        "$path": "src/Lobby/Modules"
       }
     },
 
