@@ -35,7 +35,7 @@ end
 
 local function onPlayerAdded(player)
     -- we need 2 things: Player and a Toggle if we want to lock server session "yes" to prevent item duping
-    print("WAT")
+    print("DataManager player added...")
     local profile = profileStore:LoadProfileAsync(
         "Player_" .. player.UserId,
         "ForceLoad"
