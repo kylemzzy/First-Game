@@ -1,6 +1,8 @@
 -- Services
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerScriptService = game:GetService("ServerScriptService")
+local Players = game:GetService("Players")
+
 
 -- References
 local RepMaps = ReplicatedStorage:WaitForChild("Maps")
@@ -12,6 +14,7 @@ local mapModulesFolder = ServerScriptService:WaitForChild("Server"):WaitForChild
 -- Events
 local RemoteEvents = ReplicatedStorage:WaitForChild("RemoteEvents")
 local WaitForTimerEvent = RemoteEvents:WaitForChild("WaitForGameTimer")
+local SetCameraStartGameEvent = RemoteEvents:WaitForChild("SetCameraStartGame")
 
 local MapsFolder = ReplicatedStorage:WaitForChild("Maps")
 local getMaps = MapsFolder:GetChildren()
@@ -26,14 +29,17 @@ function map.Wait(timer, mapName)
     task.wait(timer)
 end
 
-function map.Select()
+function map.Select(maxPlayers)
     local random = math.random(1,#getMaps)
     local selectedMap = getMaps[random]
-    map.Wait(10, selectedMap.Name)
-    map.Spawn(selectedMap)
+    -- TESTING DELETE LATE-- TESTING DELETE LATE-- TESTING DELETE LATE-- TESTING DELETE LATE
+    local selectedMap = MapsFolder:FindFirstChild("Jump")
+    -- TESTING DELETE LATE-- TESTING DELETE LATE-- TESTING DELETE LATE-- TESTING DELETE LATE
+    map.Wait(3, selectedMap.Name)
+    map.Spawn(selectedMap, maxPlayers)
 end
 
-function map.Spawn(selectedMap)
+function map.Spawn(selectedMap, maxPlayers)
     local getMap = RepMaps:FindFirstChild(selectedMap.Name)
     -- if we cant find a map for some reason, default to the tags map
     if not getMap then
@@ -43,15 +49,23 @@ function map.Spawn(selectedMap)
     -- REQUIRE HERE?
     ----------------------------- MODULE SCRIPT HERE ----------------------- TO CLONE THE MAPS
     local moduleMap = require(mapModulesFolder[getMap.Name])
-    moduleMap.Generate()
+    moduleMap.Generate(getMap, maxPlayers)
     -- clone the map into the playarea
     local clonedMap = getMap:Clone()
     clonedMap.Parent = PlayArea
-
     -- disable the platform in the spawnBox
     -- CASE IS WHAT IF THIS DOES NOT EXIST? then just teleport the . do later
-    SpawnBox.Floor.Transparency = 1
-    SpawnBox.Floor.CanCollide = false
+    -- SpawnBox.Floor.Transparency = 1
+    -- SpawnBox.Floor.CanCollide = false
+    task.wait(10)
+    PlayArea:ClearAllChildren()
+
+    local listOfPlayers = Players:GetPlayers()
+    for i, player in ipairs(listOfPlayers) do
+        player.Character.PrimaryPart.CFrame = SpawnBox.Spawn.CFrame
+        player.Character.Humanoid.WalkSpeed = 16
+    end
+    SetCameraStartGameEvent:FireAllClients(map.Camera, true)
 end
 
 

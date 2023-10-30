@@ -12,14 +12,27 @@ local PlayerGui = Player:WaitForChild("PlayerGui")
 local TimerGui = PlayerGui:WaitForChild("Timer")
 local TimerTextLabel = TimerGui:WaitForChild("TextLabel")
 
+local camera = workspace.CurrentCamera
+
 
 -- Events
 local RemoteEvents = ReplicatedStorage:WaitForChild("RemoteEvents")
 local WaitForTimerEvent = RemoteEvents:WaitForChild("WaitForGameTimer")
 local WaitForPlayersEvent = RemoteEvents:WaitForChild("WaitForPlayers")
 
+local SetCameraStartGameEvent = RemoteEvents:WaitForChild("SetCameraStartGame")
 
-
+-- set the camera to the view of the map when game starts
+SetCameraStartGameEvent.OnClientEvent:Connect(function(cameraCFrame, spawn)
+    if spawn then
+        camera.CameraSubject = Player.Character.Humanoid
+        camera.CameraType = Enum.CameraType.Custom
+    else
+        camera.CameraType = Enum.CameraType.Scriptable
+        camera.CFrame = cameraCFrame.CFrame
+    end
+    
+end)
 
 WaitForTimerEvent.OnClientEvent:Connect(function(message, timer)
     -- timer to start game, update the client Gui

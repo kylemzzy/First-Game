@@ -24,12 +24,13 @@ local maxPlayers = 0
 -- gather all maps currently available
 Players.PlayerAdded:Connect(function(player)
     numberOfPlayers +=1
+    -- teleport data sent in the number of players that teleported, we can use that as max players
     local teleportData = player:GetJoinData().TeleportData
     if teleportData then
         maxPlayers = teleportData.MaxPlayers
     else
         -- this means we are in roblox studio, we can set number of players to uhh 1
-        maxPlayers = 1
+        maxPlayers = 4
     end
     -- send Gui Update to everyone
     WaitForPlayersEvent:FireAllClients(numberOfPlayers, maxPlayers)
@@ -37,7 +38,7 @@ Players.PlayerAdded:Connect(function(player)
         -- ACTUALLY, CREATE A NEW TABLE THAT FITS IN WITH THE AMOUNT OF PLAYERS THERE ARE.
 
         -- CHECK NOW AND CHECK AGAIN BEFORE MAP SELECTIONS TO SEE IF A PLAYER LEAVES
-        map.Select()
+        map.Select(maxPlayers)
     end
 end)
 
