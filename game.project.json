@@ -24,7 +24,7 @@
         "$path": "src/Game/Shared"
       },
       "Modules": {
-        "$path": "src/Lobby/Modules"
+        "$path": "src/Game/Modules"
       }
     },
 

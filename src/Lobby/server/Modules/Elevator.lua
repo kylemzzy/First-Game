@@ -27,6 +27,11 @@ function elevator.TeleportPlayers(waitingPlayers)
     local options = Instance.new("TeleportOptions")
     local gameAreaPlaceID = 15148385760
     options.ReservedServerAccessCode = reservedServerCode
+    -- pass data to teleport, the number of players
+    options:SetTeleportData({
+        ["MaxPlayers"] = #waitingPlayers
+    })
+    -------------------POSSIBLE PROBLEM, lock players from rejoining -------------------
     -- roblox provided module script to handle failed teleports
     FailedTeleports(gameAreaPlaceID, waitingPlayers, options)
 end
