@@ -63,7 +63,8 @@ function map.Spawn(selectedMap, maxPlayers)
         player.Character.PrimaryPart.CFrame = SpawnBox.Spawn.CFrame
         player.Character.Humanoid.WalkSpeed = 16
     end
-    SetCameraStartGameEvent:FireAllClients(map.Camera, true)
+    -- SetCameraStartGameEvent:FireAllClients(map.Camera, true)
+
 end
 
 

@@ -24,6 +24,7 @@ local SetCameraStartGameEvent = RemoteEvents:WaitForChild("SetCameraStartGame")
 
 -- set the camera to the view of the map when game starts
 SetCameraStartGameEvent.OnClientEvent:Connect(function(cameraCFrame, spawn)
+    print ("WOWOW")
     if spawn then
         camera.CameraSubject = Player.Character.Humanoid
         camera.CameraType = Enum.CameraType.Custom
