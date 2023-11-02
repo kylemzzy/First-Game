@@ -2,6 +2,7 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerScriptService = game:GetService("ServerScriptService")
 local Players = game:GetService("Players")
+local SoundService = game:GetService("SoundService")
 -- local TeleportService = game:GetService("TeleportService")
 
 -- Requries
@@ -21,6 +22,8 @@ local numberOfPlayers = 0
 local maxPlayers = 0
 
 ------------------------------- MAIN -------------------------------
+SoundService.GeneralBackground:Play()
+SoundService.Crowd:Play()
 -- gather all maps currently available
 Players.PlayerAdded:Connect(function(player)
     numberOfPlayers +=1
@@ -30,7 +33,7 @@ Players.PlayerAdded:Connect(function(player)
         maxPlayers = teleportData.MaxPlayers
     else
         -- this means we are in roblox studio, we can set number of players to uhh 1
-        maxPlayers = 4
+        maxPlayers = 1
     end
     -- send Gui Update to everyone
     WaitForPlayersEvent:FireAllClients(numberOfPlayers, maxPlayers)

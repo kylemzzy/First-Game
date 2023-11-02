@@ -7,7 +7,8 @@ local Players = game:GetService("Players")
 -- References
 local RepMaps = ReplicatedStorage:WaitForChild("Maps")
 local PlayArea = workspace.PlayArea
-local SpawnBox = workspace.SpawnBox
+local Buildings = workspace.Buildings
+local SpawnBox = Buildings.SpawnBox
 
 local mapModulesFolder = ServerScriptService:WaitForChild("Server"):WaitForChild("Modules"):WaitForChild("AllMaps")
 
@@ -53,10 +54,7 @@ function map.Spawn(selectedMap, maxPlayers)
     -- clone the map into the playarea
     local clonedMap = getMap:Clone()
     clonedMap.Parent = PlayArea
-    -- disable the platform in the spawnBox
-    -- CASE IS WHAT IF THIS DOES NOT EXIST? then just teleport the . do later
-    -- SpawnBox.Floor.Transparency = 1
-    -- SpawnBox.Floor.CanCollide = false
+    
     task.wait(10)
     PlayArea:ClearAllChildren()
 

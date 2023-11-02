@@ -22,4 +22,8 @@ function jump.Generate(map, maxPlayers)
     end
 end
 
+function jump.Cutscene()
+    
+end
+
 return jump
